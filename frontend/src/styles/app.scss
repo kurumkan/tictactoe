@@ -1,0 +1,23 @@
+@import "components/board";
+@import "components/videobox";
+@import "components/textbox";
+
+body{
+	background-color: #14BDAC;
+	color: #0da192;
+	padding-top: 30px;
+}
+
+.page-title{
+	margin-bottom: 30px;
+	text-align: center;
+	color: white;
+	font-size: 52px;
+	font-weight: 900;
+	span:nth-child(2){
+		color: #0da192;
+	}	
+	span:nth-child(3){
+		color: #cf4242;
+	}	
+}

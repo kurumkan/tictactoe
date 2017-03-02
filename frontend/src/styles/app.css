@@ -1,2 +1,2 @@
-
+.board table{margin:0 auto;width:350px;border-collapse:collapse;border:11px solid #14BDAC}.board td{border:10px solid #0da192;width:100px;height:100px;cursor:pointer}.video-box{background:black;width:100%;min-height:300px}body{background-color:#14BDAC;color:#0da192;padding-top:30px}.page-title{margin-bottom:30px;text-align:center;color:white;font-size:52px;font-weight:900}.page-title span:nth-child(2){color:#0da192}.page-title span:nth-child(3){color:#cf4242}
 /*# sourceMappingURL=app.css.map */

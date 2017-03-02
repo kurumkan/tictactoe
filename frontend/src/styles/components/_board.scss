@@ -1,0 +1,18 @@
+.board{	
+	margin-bottom: 30px;
+
+	table{		
+		margin: 0 auto;
+		width: 350px;
+		border-collapse: collapse;		
+		border: 11px solid #14BDAC;		 
+	}
+
+	td{		
+		border: 10px solid #0da192;
+		width: 100px;
+		height: 100px;
+		cursor: pointer;
+	}
+
+}

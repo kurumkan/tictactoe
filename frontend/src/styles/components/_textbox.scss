@@ -1,0 +1,33 @@
+@media only screen and (min-width : 992px) {
+	.text-box{
+		margin-left: -15px;
+	}
+}
+
+.text-box{	
+	min-height: 400px;
+	padding: 10px;
+	background: #0da192;
+
+	#message-box{
+		height: 290px;
+		background: white;
+		margin-bottom: 10px;
+		overflow-y: scroll;
+	}
+	textarea{
+		width: 100%;
+		resize: none;
+	}
+	span{
+		color: black;
+		.is-online{
+			display: inline-block;
+			border-radius: 50%;
+			width: 10px;
+			height: 10px;
+			background: #cf4242;
+			margin-right: 5px;
+		}
+	}
+}

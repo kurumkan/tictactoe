@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "test": "NODE_PATH=./frontend/src mocha  -r mock-local-storage   --compilers js:babel-core/register --require ./test/test_helper.jsx --recursive ./test",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "dev": "nodemon app.js"
   },
   "author": "artur arsalanov",
   "license": "ISC",
@@ -41,7 +42,6 @@
     "babel-preset-stage-1": "^6.1.18",
     "express": "^4.14.1",
     "lodash": "^3.10.1",
-    "mongoose": "^4.8.1",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
     "react-pure-render": "^1.0.2",
@@ -49,7 +49,8 @@
     "react-router": "^2.0.1",
     "redux": "^3.0.4",
     "redux-thunk": "^2.2.0",
-    "request": "^2.79.0",
-    "socket.io": "^1.7.2"
+    "socket.io": "^1.7.2",
+    "socket.io-client": "^1.7.3",
+    "uuid": "^3.0.1"
   }
 }
