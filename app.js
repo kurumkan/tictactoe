@@ -1,6 +1,8 @@
 var express = require("express");
 var app = express();
-var path =require("path");
+var path = require("path");
+var uuid = require('uuid');
+
 var {handleError} = require("./util_helpers.js");
 
 app.use(function(req, res, next){
@@ -33,19 +35,51 @@ var server = app.listen(PORT, function(){
 // attach Socket.io to our server
 var io = require('socket.io').listen(server);
 
+var rooms=[];
 // handle incoming connections from clients
 io.sockets.on('connection', function(socket) {
-	console.log('connection!!!')
-    // once a client has connected, we expect to get a ping from them saying what room they want to join
-    socket.on('room', function(room) {
-    	console.log('room '+room)
-        socket.join(room);
-    });
-    
-    socket.on('fromclient', function(data){
-    	console.log('from clint callback', data.message)
-        //send the message to everyone in the room except sender
-        socket.broadcast.to(data.room).emit('message', data.message);
-    });        
+    var room = uuid();
+    socket.emit('room', room);    
+    rooms.push(room);
+    console.log('connnected', room)
+
+    socket.on('action', function(data){
+    	console.log('action', data)       
+        var {payload} = data.action;
+        switch(data.action.type){
+            case 'SEND_MESSAGE':
+                console.log('SEND_MESSAGE', data.room, payload)
+                //send the message to everyone in the room except sender                
+                socket.broadcast.to(data.room).emit('message', payload);
+                break;
+
+            case 'SET_ROOM':
+                var room = payload; 
+                console.log('SET_ROOM', payload) 
+                if(rooms.indexOf(room)<0){                    
+                    socket.emit('refuse');                    
+                }else{
+                    socket.emit('ok');                
+                    //num of clients in room                        
+                    var n=0;
+                    var roomData = io.sockets.adapter.rooms[room];
+                    if(roomData) n = roomData.length;                                
+                    
+                    if(n<2){                    
+                        socket.join(room);
+                        //2 clients in room. start game
+                        if(n==1){
+                            io.in(room).emit('start');                                        
+                            console.log('start ',room)
+                        }    
+                    }else{
+                        //the room is full(max 2 clients)
+                        socket.emit('refuse');
+                    }    
+                }              
+                
+                break;
+        }
+    });          
 });
 
