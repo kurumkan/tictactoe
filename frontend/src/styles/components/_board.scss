@@ -1,18 +1,29 @@
 .board{	
 	margin-bottom: 30px;
 	width: 100%;	
+	font-size: 56px;	
+	text-align: center;	
+	font-weight: bold;	
 
 	table{		
 		margin: 0 auto;		
-		width: 100%;
+		width: 270px;
 		border-collapse: collapse;		
 		border: 11px solid #14BDAC;		 
 	}
 
 	td{		
-		border: 10px solid #0da192;		
-		cursor: pointer;		
-		width: 33%; padding-bottom: 33%; height: 0; 
+		border: 10px solid #0da192;								 		
+		width: 90px;
+		height: 90px;
 	}
-
+	.cross{
+		color: #cf4242;				
+	}
+	.nought{
+		color: white;		
+	}	
+	.clickable{
+		cursor: pointer;
+	}
 }

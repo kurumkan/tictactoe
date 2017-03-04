@@ -114,13 +114,27 @@
 		store.dispatch((0, _Actions.receiveMessage)(data));
 	});
 
-	socket.on('start', function (data) {
-		store.dispatch((0, _Actions.setGameStatus)('START'));
-	});
-
 	socket.on('refuse', function () {
 		_reactRouter.browserHistory.push('404');
-		(0, _Actions.setRoom)('');
+		store.dispatch((0, _Actions.setRoom)(''));
+	});
+
+	socket.on('game status', function (data) {
+		console.log(data);
+		//data can be `START`, `DRAW`, `WIN`, `LOOSE`
+		store.dispatch((0, _Actions.setGameStatus)(data));
+	});
+
+	socket.on('your turn', function () {
+		store.dispatch((0, _Actions.changeGameTurn)());
+	});
+
+	socket.on('set symbol', function (data) {
+		store.dispatch((0, _Actions.setSybmol)(data));
+	});
+
+	socket.on('update board', function (data) {
+		store.dispatch((0, _Actions.updateBoard)(data));
 	});
 
 	_reactDom2.default.render(_react2.default.createElement(
@@ -35984,7 +35998,7 @@
 	var RootReducer = (0, _redux.combineReducers)({
 		messages: _MessageReducer2.default,
 		room: _RoomReducer2.default,
-		gameStatus: _GameReducer2.default
+		game: _GameReducer2.default
 	});
 
 	exports.default = RootReducer;
@@ -36052,18 +36066,47 @@
 		value: true
 	});
 
-	exports.default = function () {
-		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-		var action = arguments[1];
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+	exports.default = function () {
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
+		var action = arguments[1];
 
 		switch (action.type) {
 			case 'SET_GAME_STATUS':
-				return action.payload;
+				return _extends({}, state, { status: action.payload });
+			case 'CHANGE_GAME_TURN':
+				return _extends({}, state, { canMove: !state.canMove });
+			case 'SET_SYMBOL':
+				return _extends({}, state, { symbol: action.payload });
+			case 'MAKE_MOVE':
+				var board = state.board;
 
+				var coords = action.payload;
+				console.log('MAKE_MOVE', coords);
+				board[coords.x][coords.y] = state.symbol == 'CROSS' ? 'x' : 'o';
+				return _extends({}, state, { board: board });
+			case 'UPDATE_BOARD':
+				console.log('UPDATE_BOARD', action.payload);
+				return _extends({}, state, { board: action.payload });
+			case 'RESET_GAME':
+				return {
+					board: [['', '', ''], ['', '', ''], ['', '', '']],
+					status: 'AWAIT',
+					symbol: null,
+					canMove: false
+				};
 			default:
 				return state;
 		}
+	};
+
+	var INITIAL_STATE = {
+		board: [['', '', ''], ['', '', ''], ['', '', '']],
+		//possible values `AWAIT`,`START`, `DRAW`, `WIN`, `LOOSE`
+		status: 'AWAIT',
+		symbol: null,
+		canMove: false
 	};
 
 /***/ },
@@ -36180,24 +36223,57 @@
 				if (room) {
 					setTimeout(function () {
 						_this2.props.setRoom(room);
-					}, 300);
+					}, 600);
 				}
+			}
+		}, {
+			key: 'componentWillReceiveProps',
+			value: function componentWillReceiveProps(nextProps) {
+				if (this.props.room != nextProps.room) _reactRouter.browserHistory.push('game?room=' + nextProps.room);
+			}
+		}, {
+			key: 'handleClick',
+			value: function handleClick(e) {
+				console.log('handleClick');
+				this.props.resetGame();
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				var _props = this.props,
-				    gameStatus = _props.gameStatus,
+				    game = _props.game,
 				    room = _props.room;
 
-				if (gameStatus != 'START' && room) {
+				var gameStatus = game.status;
+				if (gameStatus == 'AWAIT' && room) {
 					return _react2.default.createElement(
 						'div',
 						null,
-						'Please follow copy this link and shre with your opponent',
+						'Please copy this link and share with your opponent',
 						_react2.default.createElement('br', null),
 						'http://localhost:5000/game?room=',
 						room
+					);
+				} else if (gameStatus != 'AWAIT' && gameStatus != 'START') {
+					var text = gameStatus == 'DRAW' ? gameStatus : 'YOU ' + gameStatus;
+					return _react2.default.createElement(
+						'div',
+						null,
+						_react2.default.createElement(
+							'p',
+							null,
+							text
+						),
+						_react2.default.createElement(
+							'p',
+							null,
+							'Would you like to play another game?'
+						),
+						_react2.default.createElement(
+							'button',
+							{ className: 'btn btn-danger', onClick: this.handleClick.bind(this) },
+							'YES'
+						)
 					);
 				}
 
@@ -36258,18 +36334,18 @@
 	}(_react.Component);
 
 	function mapStateToProps(state) {
-		var gameStatus = state.gameStatus,
+		var game = state.game,
 		    room = state.room,
 		    messages = state.messages;
 
 		return {
-			gameStatus: gameStatus,
+			game: game,
 			room: room,
 			messages: messages
 		};
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { setRoom: _Actions.setRoom })(IndexPage);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { setRoom: _Actions.setRoom, resetGame: _Actions.resetGame })(IndexPage);
 
 /***/ },
 /* 320 */
@@ -36284,8 +36360,12 @@
 	exports.receiveMessage = receiveMessage;
 	exports.setRoom = setRoom;
 	exports.setGameStatus = setGameStatus;
+	exports.makeMove = makeMove;
+	exports.changeGameTurn = changeGameTurn;
+	exports.setSybmol = setSybmol;
+	exports.updateBoard = updateBoard;
+	exports.resetGame = resetGame;
 	function sendMessage(data) {
-		console.log('sendMessage ', data);
 		return {
 			type: 'SEND_MESSAGE',
 			payload: data,
@@ -36294,7 +36374,6 @@
 	}
 
 	function receiveMessage(data) {
-		console.log('receiveMessage ', data);
 		return {
 			type: 'RECEIVE_MESSAGE',
 			payload: data
@@ -36302,6 +36381,7 @@
 	}
 
 	function setRoom(room) {
+		console.log('setRoom', room);
 		return {
 			type: 'SET_ROOM',
 			payload: room,
@@ -36310,9 +36390,59 @@
 	}
 
 	function setGameStatus(status) {
+		console.log('setGameStatus');
 		return {
 			type: 'SET_GAME_STATUS',
 			payload: status
+		};
+	}
+
+	function makeMove(id) {
+		return function (dispatch) {
+			dispatch(changeGameTurn());
+
+			var coords = {
+				x: id.charAt(1),
+				y: id.charAt(2)
+			};
+			dispatch({
+				type: 'MAKE_MOVE',
+				payload: coords,
+				meta: { remote: true }
+			});
+		};
+	}
+
+	function changeGameTurn() {
+		return {
+			type: 'CHANGE_GAME_TURN'
+		};
+	}
+
+	function setSybmol(symbol) {
+		return {
+			type: 'SET_SYMBOL',
+			payload: symbol
+		};
+	}
+
+	function updateBoard(board) {
+		return function (dispatch) {
+			dispatch({
+				type: 'UPDATE_BOARD',
+				payload: board
+			});
+			dispatch(changeGameTurn());
+		};
+	}
+
+	function resetGame() {
+		console.log('reset game action creator');
+		return function (dispatch) {
+			dispatch({
+				type: 'RESET_GAME',
+				meta: { remote: true }
+			});
 		};
 	}
 
@@ -36332,6 +36462,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(160);
+
+	var _Actions = __webpack_require__(320);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -36350,39 +36484,71 @@
 		}
 
 		_createClass(Board, [{
+			key: 'handleClick',
+			value: function handleClick(e) {
+				var id = e.target.id;
+
+				if (id && this.props.game.canMove) {
+					console.log('move', id);
+					this.props.makeMove(id);
+				}
+			}
+		}, {
 			key: 'render',
 			value: function render() {
+				var _props$game = this.props.game,
+				    board = _props$game.board,
+				    canMove = _props$game.canMove;
+
+				var className = canMove ? 'clickable' : '';
+
+				var renderRow = function renderRow(row, i) {
+					var cells = row.map(function (c, j) {
+						switch (c) {
+							case 'x':
+								return _react2.default.createElement(
+									'td',
+									{ className: 'cross', key: j },
+									c
+								);
+							case 'o':
+								return _react2.default.createElement(
+									'td',
+									{ className: 'nought', key: j },
+									c
+								);
+							default:
+								return _react2.default.createElement(
+									'td',
+									{ id: 'c' + i + j, key: j, className: className },
+									c
+								);
+						}
+					});
+
+					return _react2.default.createElement(
+						'tr',
+						{ key: i },
+						cells
+					);
+				};
+
+				var renderBoard = board.map(function (row, i) {
+					return _react2.default.createElement(
+						'tbody',
+						null,
+						renderRow(row, i)
+					);
+				});
+				console.log(board);
+
 				return _react2.default.createElement(
 					'div',
-					{ className: 'board' },
+					{ className: 'board', onClick: this.handleClick.bind(this) },
 					_react2.default.createElement(
 						'table',
 						null,
-						_react2.default.createElement(
-							'tbody',
-							null,
-							_react2.default.createElement(
-								'tr',
-								null,
-								_react2.default.createElement('td', { id: 'c00' }),
-								_react2.default.createElement('td', { id: 'c01' }),
-								_react2.default.createElement('td', { id: 'c02' })
-							),
-							_react2.default.createElement(
-								'tr',
-								null,
-								_react2.default.createElement('td', { id: 'c10' }),
-								_react2.default.createElement('td', { id: 'c11' }),
-								_react2.default.createElement('td', { id: 'c12' })
-							),
-							_react2.default.createElement(
-								'tr',
-								null,
-								_react2.default.createElement('td', { id: 'c20' }),
-								_react2.default.createElement('td', { id: 'c21' }),
-								_react2.default.createElement('td', { id: 'c22' })
-							)
-						)
+						renderBoard
 					)
 				);
 			}
@@ -36391,7 +36557,15 @@
 		return Board;
 	}(_react.Component);
 
-	exports.default = Board;
+	function mapStateToProps(state) {
+		var game = state.game;
+
+		return {
+			game: game
+		};
+	}
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { makeMove: _Actions.makeMove })(Board);
 
 /***/ },
 /* 322 */
@@ -36513,12 +36687,12 @@
 				var _this2 = this;
 
 				var _props = this.props,
-				    gameStatus = _props.gameStatus,
-				    messages = _props.messages;
+				    messages = _props.messages,
+				    game = _props.game;
 
+				var gameStatus = game.status;
 				var style = { background: gameStatus == 'START' ? 'green' : '#cf4242' };
 				var statusText = gameStatus == 'START' ? 'Opponent is connected' : 'No opponent yet';
-				console.log(messages);
 
 				var renderMessages = messages.map(function (m, i) {
 					var className = m.remote ? 'opponent' : 'me';
@@ -36561,11 +36735,11 @@
 
 	function mapStateToProps(state) {
 		var messages = state.messages,
-		    gameStatus = state.gameStatus;
+		    game = state.game;
 
 		return {
 			messages: messages,
-			gameStatus: gameStatus
+			game: game
 		};
 	}
 
@@ -36709,7 +36883,7 @@
 
 
 	// module
-	exports.push([module.id, ".board {\n  margin-bottom: 30px;\n  width: 100%; }\n  .board table {\n    margin: 0 auto;\n    width: 100%;\n    border-collapse: collapse;\n    border: 11px solid #14BDAC; }\n  .board td {\n    border: 10px solid #0da192;\n    cursor: pointer;\n    width: 33%;\n    padding-bottom: 33%;\n    height: 0; }\n\n.video-box {\n  background: black;\n  height: 60vh;\n  margin-bottom: 15px; }\n\n.text-box {\n  height: 60vh;\n  padding: 10px;\n  background: #0da192;\n  color: #555; }\n  .text-box #message-box {\n    height: 40vh;\n    background: white;\n    margin: 10px 0;\n    overflow-y: scroll; }\n    .text-box #message-box .me {\n      background: rgba(177, 217, 164, 0.5); }\n    .text-box #message-box .opponent {\n      background: rgba(204, 240, 254, 0.5);\n      text-align: right; }\n    .text-box #message-box p {\n      padding: 0 10px; }\n  .text-box textarea {\n    width: 100%;\n    resize: none; }\n  .text-box span {\n    color: black; }\n    .text-box span .is-ready {\n      display: inline-block;\n      border-radius: 50%;\n      width: 10px;\n      height: 10px;\n      margin-right: 5px; }\n\nbody {\n  background-color: #14BDAC;\n  color: #0da192;\n  padding-top: 30px; }\n\n.page-title {\n  margin-bottom: 30px;\n  text-align: center;\n  color: white;\n  font-size: 52px;\n  font-weight: 900; }\n  .page-title span:nth-child(2) {\n    color: #0da192; }\n  .page-title span:nth-child(3) {\n    color: #cf4242; }\n", ""]);
+	exports.push([module.id, ".board {\n  margin-bottom: 30px;\n  width: 100%;\n  font-size: 56px;\n  text-align: center;\n  font-weight: bold; }\n  .board table {\n    margin: 0 auto;\n    width: 270px;\n    border-collapse: collapse;\n    border: 11px solid #14BDAC; }\n  .board td {\n    border: 10px solid #0da192;\n    width: 90px;\n    height: 90px; }\n  .board .cross {\n    color: #cf4242; }\n  .board .nought {\n    color: white; }\n  .board .clickable {\n    cursor: pointer; }\n\n.video-box {\n  background: black;\n  height: 60vh;\n  margin-bottom: 15px; }\n\n.text-box {\n  height: 60vh;\n  padding: 10px;\n  background: #0da192;\n  color: #555; }\n  .text-box #message-box {\n    height: 40vh;\n    background: white;\n    margin: 10px 0;\n    overflow-y: scroll; }\n    .text-box #message-box .me {\n      background: rgba(177, 217, 164, 0.5); }\n    .text-box #message-box .opponent {\n      background: rgba(204, 240, 254, 0.5);\n      text-align: right; }\n    .text-box #message-box p {\n      margin: 1px 5px;\n      padding: 0px 10px;\n      border-radius: 5px; }\n  .text-box textarea {\n    width: 100%;\n    resize: none; }\n  .text-box span {\n    color: black; }\n    .text-box span .is-ready {\n      display: inline-block;\n      border-radius: 50%;\n      width: 10px;\n      height: 10px;\n      margin-right: 5px; }\n\nbody {\n  background-color: #14BDAC;\n  color: #0da192;\n  padding-top: 30px; }\n\n.page-title {\n  margin-bottom: 30px;\n  text-align: center;\n  color: white;\n  font-size: 52px;\n  font-weight: 900; }\n  .page-title span:nth-child(2) {\n    color: #0da192; }\n  .page-title span:nth-child(3) {\n    color: #cf4242; }\n", ""]);
 
 	// exports
 

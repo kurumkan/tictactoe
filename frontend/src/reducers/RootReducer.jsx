@@ -6,7 +6,7 @@ import GameReducer from 'reducers/GameReducer';
 const RootReducer = combineReducers({
 	messages: MessageReducer,
 	room: RoomReducer,
-	gameStatus: GameReducer
+	game: GameReducer
 });
 
 export default RootReducer;

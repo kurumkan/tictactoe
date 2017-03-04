@@ -3,31 +3,50 @@ import { connect } from 'react-redux';
 import {browserHistory} from 'react-router';
 
 
-import {setRoom} from 'actions/Actions';
+import {setRoom, resetGame} from 'actions/Actions';
 import Board from 'components/Board';
 import VideoBox from 'components/VideoBox';
 import TextBox from 'components/TextBox';
 
 class IndexPage extends Component{
 	componentWillMount() {	
-		var {room} = this.props.location.query;			
+		var {room} = this.props.location.query;				
 		if(room){						
 			setTimeout(()=>{
 				this.props.setRoom(room)							
-			}, 300)							
+			}, 600)							
 		}
 	}	
+	componentWillReceiveProps(nextProps) {		
+		if(this.props.room!=nextProps.room)		
+			browserHistory.push(`game?room=${nextProps.room}`)
+	}		
 
-	render(){
-		var {gameStatus, room} = this.props;					
-		if(gameStatus!='START' && room){						
+	handleClick(e){
+		console.log('handleClick')
+		this.props.resetGame();		
+	}
+
+	render(){		
+		var {game, room} = this.props;					
+		var gameStatus = game.status;		
+		if(gameStatus=='AWAIT' && room){				
 			return (
 				<div>
-					Please follow copy this link and shre with your opponent<br/>
+					Please copy this link and share with your opponent<br/>
 					http://localhost:5000/game?room={room}
 				</div>
 			)
-		}
+		}else if(gameStatus!='AWAIT'&&gameStatus!='START'){
+			var text = gameStatus=='DRAW'? gameStatus : 'YOU '+gameStatus;
+			return (
+				<div>
+					<p>{text}</p>
+					<p>Would you like to play another game?</p>
+					<button className='btn btn-danger' onClick={this.handleClick.bind(this)}>YES</button>
+				</div>
+			)
+		}		
 
 		return (
 			<div className='container-fluid index-page'>	
@@ -56,13 +75,13 @@ class IndexPage extends Component{
 
 
 function mapStateToProps(state) {
-	var {gameStatus,room, messages} = state;
+	var {game,room, messages} = state;
 	return {
-		gameStatus,
+		game,
 		room,
 		messages
 	};
 }
 
 
-export default connect(mapStateToProps, {setRoom})(IndexPage);
+export default connect(mapStateToProps, {setRoom, resetGame})(IndexPage);

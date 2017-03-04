@@ -6,9 +6,8 @@ export default function(state=[], action){
 			var remote=false;
 			if(action.meta&&action.meta.remote)
 				remote=true;
-						
-			return [...state, {text:action.payload, remote}];			
-		
+
+			return [...state, {text:action.payload, remote}];		
 			
 		default:
 			return state;			

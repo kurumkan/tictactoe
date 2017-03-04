@@ -27,10 +27,10 @@ class TextBox extends Component{
 		messageBox.scrollTop = messageBox.scrollHeight; 					
 	}
 	render() {		
-		var {gameStatus, messages} = this.props;
+		var {messages, game} = this.props;
+		var gameStatus = game.status;
 		var style = {background: gameStatus=='START'?'green':'#cf4242'};
-		var statusText = gameStatus=='START'?'Opponent is connected':'No opponent yet';	
-		console.log(messages)
+		var statusText = gameStatus=='START'?'Opponent is connected':'No opponent yet';			
 
 		var renderMessages = messages.map((m, i)=>{
 			var className=m.remote?'opponent':'me'
@@ -60,10 +60,10 @@ class TextBox extends Component{
 }
 
 function mapStateToProps(state) {
-	var {messages, gameStatus} = state;
+	var {messages, game} = state;
 	return {
 		messages,
-		gameStatus	
+		game		
 	};
 }
 
