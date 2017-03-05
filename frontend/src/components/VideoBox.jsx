@@ -6,7 +6,7 @@ class VideoBox extends Component{
 		if(nextProps.game.status=='START'&&!this.props.game.symbol){						
 			var roomId = nextProps.room;
 			var port = process.env.PORT || 8080;
-			var url = 'http://'+window.location.hostname+':'+ port;
+			var url = 'http://'+window.location.hostname+':'+ 49156;
 			console.log(url)			
 			var rtcOpts = {
 				room: roomId,            
