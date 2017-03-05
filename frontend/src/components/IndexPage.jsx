@@ -28,8 +28,7 @@ class IndexPage extends Component{
 
 	render(){		
 		var {game, room} = this.props;					
-		var gameStatus = game.status;	
-		var port = process.env.PORT || 5000;		
+		var gameStatus = game.status;			
 		if(gameStatus=='AWAIT' && room){				
 			return (
 				<div>

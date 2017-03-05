@@ -36193,7 +36193,7 @@
 /* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -36271,7 +36271,6 @@
 				    room = _props.room;
 
 				var gameStatus = game.status;
-				var port = process.env.PORT || 5000;
 				if (gameStatus == 'AWAIT' && room) {
 					return _react2.default.createElement(
 						'div',
@@ -36372,7 +36371,6 @@
 	}
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { setRoom: _Actions.setRoom, resetGame: _Actions.resetGame })(IndexPage);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ },
 /* 323 */
@@ -36594,7 +36592,7 @@
 /* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -36638,8 +36636,7 @@
 
 
 					var roomId = nextProps.room;
-					var port = process.env.PORT || 5000;
-					var url = 'http://' + window.location.hostname + ':' + port;
+					var url = 'http://' + window.location.hostname;
 					console.log('cwu', roomId, port, url);
 					var rtcOpts = {
 						room: roomId,
@@ -36688,7 +36685,6 @@
 		};
 	}
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(VideoBox);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ },
 /* 326 */
