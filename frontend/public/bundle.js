@@ -36592,7 +36592,7 @@
 /* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -36636,8 +36636,8 @@
 
 
 					var roomId = nextProps.room;
-					var port = process.env.PORT || 5000;
-					var url = 'http://' + window.location.hostname + ':' + port;
+					//var port = process.env.PORT || 8080;
+					var url = 'http://' + window.location.hostname;
 					console.log(url);
 					var rtcOpts = {
 						room: roomId,
@@ -36686,7 +36686,6 @@
 		};
 	}
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(VideoBox);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ },
 /* 326 */
