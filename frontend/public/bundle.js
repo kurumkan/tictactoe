@@ -36637,8 +36637,11 @@
 
 					var roomId = nextProps.room;
 					var port = process.env.PORT || 5000;
-					var url = 'http://' + window.location.hostname + ':' + port;
-					console.log('cwu', roomId, port, url);
+					//var url = 'http://'+window.location.hostname+':'+ port;
+					var url = 'http://' + window.location.hostname;
+
+					console.log(url);
+					//console.log('cwu',roomId, port, url)
 					var rtcOpts = {
 						room: roomId,
 						signaller: url
