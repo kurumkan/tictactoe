@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 class VideoBox extends Component{		
 	componentWillUpdate(nextProps, nextState) {			
 		if(nextProps.game.status=='START'&&!this.props.game.symbol){						
-			var roomId = nextProps.room;			
-			var url = 'http://'+window.location.hostname;
+			var roomId = nextProps.room;
+			var port = process.env.PORT || 5000;
+			var url = 'http://'+window.location.hostname+':'+ port;
 			console.log('cwu',roomId, port, url)
 			var rtcOpts = {
 				room: roomId,            
