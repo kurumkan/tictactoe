@@ -23,6 +23,7 @@ var createStoreWithMiddleware = applyMiddleware(ReduxThunk, RemoteActionMiddlewa
 var store = createStoreWithMiddleware(RootReducer);
 
 socket.on('room',(room)=>{	
+	console.log('new room', room)
 	store.dispatch(setRoom(room))		
 });
 
@@ -35,8 +36,7 @@ socket.on('refuse', ()=>{
 	store.dispatch(setRoom(''));		
 });
 
-socket.on('game status', (data)=>{	
-	console.log(data);
+socket.on('game status', (data)=>{		
 	//data can be `START`, `DRAW`, `WIN`, `LOOSE`
 	store.dispatch(setGameStatus(data));		
 });

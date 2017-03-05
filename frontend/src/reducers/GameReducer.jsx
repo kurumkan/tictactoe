@@ -20,12 +20,10 @@ export default function(state=INITIAL_STATE, action){
 			return {...state, symbol: action.payload}	
 		case 'MAKE_MOVE':			
 			var {board} = state;
-			var coords = action.payload;
-			console.log('MAKE_MOVE', coords)
+			var coords = action.payload;			
 			board[coords.x][coords.y]=state.symbol=='CROSS'?'x':'o';			
 			return {...state, board}							
-		case 'UPDATE_BOARD':
-			console.log('UPDATE_BOARD', action.payload)
+		case 'UPDATE_BOARD':			
 			return {...state, board: action.payload}		
 		case 'RESET_GAME':			
 			return {

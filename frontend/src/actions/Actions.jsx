@@ -13,8 +13,7 @@ export function receiveMessage(data){
 	}
 }
 
-export function setRoom(room){
-	console.log('setRoom', room)		
+export function setRoom(room){	
 	return {				
 		type: 'SET_ROOM',	
 		payload: room,
@@ -22,8 +21,7 @@ export function setRoom(room){
 	}
 }
 
-export function setGameStatus(status){		
-	console.log('setGameStatus')
+export function setGameStatus(status){			
 	return {		
 		type: 'SET_GAME_STATUS',	
 		payload: status		
@@ -69,9 +67,9 @@ export function updateBoard(board){
 	}	
 }
 
-export function resetGame(){
-	console.log('reset game action creator')
+export function resetGame(){	
 	return function(dispatch){		
+		console.log('reset game action')
 		dispatch({
 			type: 'RESET_GAME',
 			meta: {remote: true}

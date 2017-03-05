@@ -22,19 +22,19 @@ class IndexPage extends Component{
 			browserHistory.push(`game?room=${nextProps.room}`)
 	}		
 
-	handleClick(e){
-		console.log('handleClick')
+	handleClick(e){		
 		this.props.resetGame();		
 	}
 
 	render(){		
 		var {game, room} = this.props;					
-		var gameStatus = game.status;		
+		var gameStatus = game.status;	
+		var port = process.env.PORT || 5000;		
 		if(gameStatus=='AWAIT' && room){				
 			return (
 				<div>
 					Please copy this link and share with your opponent<br/>
-					http://localhost:5000/game?room={room}
+					{window.location.href}
 				</div>
 			)
 		}else if(gameStatus!='AWAIT'&&gameStatus!='START'){

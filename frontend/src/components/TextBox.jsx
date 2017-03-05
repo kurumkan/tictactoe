@@ -8,7 +8,7 @@ class TextBox extends Component{
 		this.state={value:''};		
 	}	
 	handleChange(e){		
-		var {value} = e.target;	
+		var {value} = e.target;			
 
 		if(value.charCodeAt(value.length-1)==10){
 			var value = this.state.value.trim();			
@@ -17,9 +17,7 @@ class TextBox extends Component{
 				this.props.sendMessage(value);
 			}			
 		}else{
-			if(value){
-				this.setState({value});
-			}			
+			this.setState({value});			
 		}		
 	}	
 	componentDidUpdate(prevProps, prevState) {

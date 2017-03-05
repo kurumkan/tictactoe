@@ -32,6 +32,7 @@
     "react-addons-test-utils": "^0.14.7",
     "redux-mock-store": "^1.2.2",
     "sass-loader": "^4.0.2",
+    "script-loader": "^0.7.0",
     "sinon": "^1.17.7",
     "style-loader": "^0.13.1",
     "webpack": "^1.12.9",
@@ -49,6 +50,7 @@
     "react-router": "^2.0.1",
     "redux": "^3.0.4",
     "redux-thunk": "^2.2.0",
+    "rtc-switchboard": "^3.2.0",
     "socket.io": "^1.7.2",
     "socket.io-client": "^1.7.3",
     "uuid": "^3.0.1"

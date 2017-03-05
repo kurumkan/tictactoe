@@ -19,11 +19,51 @@ app.get('*', function (request, response){
 	response.sendFile(path.resolve(__dirname, './frontend/public', 'index.html'))
 });
 
+
+
+
+var server = require('http').Server(app);
 const PORT = process.env.PORT||5000;
 
-var server = app.listen(PORT, function(){
-	console.log("Server started on port " + PORT);
+server.listen(PORT, function(err) {
+  if (err) {
+    return;
+  } 
+  console.log('server listening on port: ' + PORT);
 });
+
+// create the switchboard 
+var switchboard = require('rtc-switchboard')(server);
+
+switchboard.on('data', function(data, peerId, spark) {
+    console.log({ peer: peerId }, 'received: ' + data);
+});
+ 
+switchboard.on('room:create', function(room) {
+    console.log('room ' + room + ' created, now have ' + switchboard.rooms.length + ' active rooms');
+});
+ 
+switchboard.on('room:destroy', function(room) {
+    console.log('room ' + room + ' destroyed, ' + switchboard.rooms.length + ' active rooms remain');
+
+    if (typeof gc == 'function') {
+        console.log('gc');
+        gc();
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // attach Socket.io to our server
 var io = require('socket.io').listen(server);
@@ -78,8 +118,7 @@ io.sockets.on('connection', function(socket) {
                                     roomToRemove = key;
                             })
                             if(roomToRemove){
-                                delete rooms[roomToRemove];
-                                console.log('deleted', roomToRemove)
+                                delete rooms[roomToRemove];                                
                             }
                             //2nd has player joined. 
                             socket.join(room);
@@ -116,8 +155,7 @@ io.sockets.on('connection', function(socket) {
                     var result = checkBoard(game.board);
                     if(result){
                         switch(result){                        
-                            case 'CROSS':
-                                console.log('cross win')
+                            case 'CROSS':                                
                                 if(socket.id == game.cross){
                                     socket.emit('game status', "WIN");                            
                                     socket.broadcast.to(game.nought).emit('game status', 'LOOSE');
@@ -127,8 +165,7 @@ io.sockets.on('connection', function(socket) {
                                 }                            
                                 break;
             
-                            case 'NOUGHT': 
-                                console.log('nought win')
+                            case 'NOUGHT':                                 
                                 if(socket.id == game.nought){
                                     socket.emit('game status', "WIN");                            
                                     socket.broadcast.to(game.cross).emit('game status', 'LOOSE');
@@ -138,8 +175,7 @@ io.sockets.on('connection', function(socket) {
                                 }                            
                                 break;
 
-                            case 'DRAW': 
-                                console.log('send draw')
+                            case 'DRAW':                                 
                                 io.in(room).emit('game status', 'DRAW');      
                                 break;
                         }  
@@ -158,8 +194,7 @@ io.sockets.on('connection', function(socket) {
                     cross: null,
                     nought: null,
                     whoseTurn: null
-                };
-                console.log('RESET_GAME', rooms)
+                };                
                 break;                    
         }
     }); 
@@ -167,9 +202,6 @@ io.sockets.on('connection', function(socket) {
     socket.on('disconnect', () => {
         //notify the other user - he won
         //remove room                
-        console.log('disconnect', socket.id);
-        console.log('before',rooms)
-
         var roomsToRemove=[];
         var keys = Object.keys(rooms);
         keys.map(key=>{
@@ -185,8 +217,7 @@ io.sockets.on('connection', function(socket) {
         })
         if(roomsToRemove.length){
             roomsToRemove.map((roomToRemove)=>delete rooms[roomToRemove])            
-        }
-        console.log('after',rooms)
+        }        
     });
 
 });
@@ -230,3 +261,4 @@ function checkBoard(board){
     else
         return null;
 }
+

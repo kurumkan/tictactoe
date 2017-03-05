@@ -6,8 +6,7 @@ class Board extends Component{
 
 	handleClick(e){				
 		var {id} = e.target;
-		if(id && this.props.game.canMove){	
-			console.log('move', id)		
+		if(id && this.props.game.canMove){				
 			this.props.makeMove(id);					
 		}
 	}	
@@ -33,8 +32,7 @@ class Board extends Component{
 
 		var renderBoard = board.map((row, i) => {
 			return <tbody>{renderRow(row, i)}</tbody>			
-		})	
-		console.log(board)
+		})			
 
 		return (
 			<div className='board' onClick={this.handleClick.bind(this)}>

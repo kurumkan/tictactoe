@@ -1,18 +1,29 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router';
+import {browserHistory} from 'react-router';
+import { connect } from 'react-redux';
+
+import {resetGame} from 'actions/Actions';
 
 
-export default class NotFound404 extends Component{
+class NotFound404 extends Component{
+	handleClick(e){		
+		browserHistory.push('/')
+		this.props.resetGame();
+	}
+
 	render() {
 		return (
 			<div className="notfound404 jumbotron text-center">
-				<h1>Page Not Found</h1>
+				<h1>Game Not Found</h1>
 				<p className="text-danger">Error 404</p>
-				<p>The page you requested could not be found, either contact your webmaster or 
-				try again. Use your browsers Back button to navigate to the page you have prevously come from</p>
-				<p>Or you could just press this neat little button:</p>
-				<Link to="/" className="btn btn-custom-danger"><i className="glyphicon glyphicon-home"></i>Take Me Home</Link>
+				<button className="btn btn-custom-danger" onClick={this.handleClick.bind(this)}>
+					<i className="glyphicon glyphicon-home"></i>Take Me Home
+				</button>
 			</div>
 		);	
 	}
 }
+
+
+
+export default connect(null, {resetGame})(NotFound404);

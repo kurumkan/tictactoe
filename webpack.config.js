@@ -6,6 +6,7 @@
 
 module.exports = {
   entry: [
+    'script!rtc.min.js',
     './frontend/src/index.jsx'
   ],
 
