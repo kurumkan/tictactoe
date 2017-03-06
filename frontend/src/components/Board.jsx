@@ -12,8 +12,9 @@ class Board extends Component{
 	}	
 
 	render() {		
-		var {board, canMove} = this.props.game;
-		var className = canMove?'clickable':'';		
+		var {board, canMove, symbol} = this.props.game;
+		var className = canMove?'clickable':'';			
+		var content = symbol=='CROSS'?'x':'o';		
 
 		var renderRow = (row, i)=>{			
 			var cells = row.map((c,j) => {								
@@ -23,7 +24,7 @@ class Board extends Component{
 						case 'o':
 							return <td className='nought' key={j}>{c}</td>
 						default:	
-							return <td id={`c${i}${j}`} key={j} className={className}>{c}</td>
+							return <td id={`c${i}${j}`} key={j} className={className}>{content}</td>
 					}	
 				});
 

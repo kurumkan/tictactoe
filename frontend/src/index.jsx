@@ -33,7 +33,7 @@ socket.on('message', (data)=>{
 
 socket.on('refuse', ()=>{		
 	browserHistory.push('404')
-	store.dispatch(setRoom(''));		
+	//store.dispatch(setRoom(''));		
 });
 
 socket.on('game status', (data)=>{		

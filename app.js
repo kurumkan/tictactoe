@@ -35,12 +35,17 @@ server.listen(PORT, function(err) {
 // create the switchboard 
 var switchboard = require('rtc-switchboard')(server);
 
+
 switchboard.on('data', function(data, peerId, spark) {
     console.log({ peer: peerId }, 'received: ' + data);
 });
  
 switchboard.on('room:create', function(room) {
     console.log('room ' + room + ' created, now have ' + switchboard.rooms.length + ' active rooms');
+    setTimeout(()=>{
+        console.log('about emit end');
+        switchboard.emit('call:ended')
+    }, 20000);
 });
  
 switchboard.on('room:destroy', function(room) {
@@ -93,7 +98,8 @@ io.sockets.on('connection', function(socket) {
             case 'SET_ROOM':
                 var room = payload;                 
                 var game = rooms[room];
-                if(!game){                    
+                if(!game){       
+                    console.log('will be refused', room)             
                     socket.emit('refuse');                    
                 }else{
                     //num of clients in room                        
@@ -142,8 +148,9 @@ io.sockets.on('connection', function(socket) {
                 }                                    
                 break;
             case 'MAKE_MOVE':     
-                var game = rooms[room];                
-                if(game.whoseTurn==socket.id){
+                var game = rooms[room]; 
+                console.log('MAKE_MOVE',rooms, room)               
+                if(game.whoseTurn==socket.id && game.board){
                     var coords = action.payload;                          
                     game.board[coords.x][coords.y]=game.whoseTurn==game.cross?'x':'o';                    
 
@@ -194,7 +201,8 @@ io.sockets.on('connection', function(socket) {
                     cross: null,
                     nought: null,
                     whoseTurn: null
-                };                
+                };      
+                console.log('RESET GAME', newRoom, rooms);          
                 break;                    
         }
     }); 

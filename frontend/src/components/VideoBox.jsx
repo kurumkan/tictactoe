@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class VideoBox extends Component{		
-	componentWillUpdate(nextProps, nextState) {			
-		if(nextProps.game.status=='START'&&!this.props.game.symbol){						
+	componentWillUpdate(nextProps, nextState) {					
+		if(nextProps.game.status=='START'&&nextProps.game.symbol&&!this.props.game.symbol){										
 			var roomId = nextProps.room;
-			//var port = process.env.PORT || 8080;
-			var url = 'http://'+window.location.hostname;
-			console.log(url)			
+			var port = 5000;
+			var url = 'http://'+window.location.hostname+':'+port;
+
 			var rtcOpts = {
 				room: roomId,            
 				signaller: url
@@ -24,11 +24,12 @@ class VideoBox extends Component{
 			var remoteVideo = this.remoteVideo;		
 
 			// Start working with the established session
-			function init(session) {
+			function init(session) {			
 				session.createDataChannel('chat');				
-			}
+			}			
 			// Detect when RTC has established a session
 			rtc.on('ready', init);
+			rtc.close()
 		}
 	}
 	render() {

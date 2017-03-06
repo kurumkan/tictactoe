@@ -1,4 +1,4 @@
-.board{	
+.board{		  
 	margin-bottom: 30px;
 	width: 100%;	
 	font-size: 56px;	
@@ -16,6 +16,8 @@
 		border: 10px solid #0da192;								 		
 		width: 90px;
 		height: 90px;
+		color: #14BDAC;
+		transition: all 0.5s ease;
 	}
 	.cross{
 		color: #cf4242;				
@@ -24,6 +26,10 @@
 		color: white;		
 	}	
 	.clickable{
-		cursor: pointer;
-	}
+		cursor: pointer;				
+	}	
+	.clickable:hover{
+		color: #0da192;		
+	}	
+	
 }

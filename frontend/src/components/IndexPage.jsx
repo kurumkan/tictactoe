@@ -26,32 +26,32 @@ class IndexPage extends Component{
 		this.props.resetGame();		
 	}
 
-	render(){		
-		var {game, room} = this.props;					
-		var gameStatus = game.status;			
-		if(gameStatus=='AWAIT' && room){				
+	render(){				
+		var clip = new Clipboard('.link');
+		
+		var renderContent = ()=>{
+			var {game, room} = this.props;					
+			var gameStatus = game.status;			
+			if(gameStatus=='AWAIT' && room){				
+				return (
+					<div className='dialogue'>
+						<p>Copy this link by clicking on it and share it with your opponent. </p>
+						<div className='link' data-clipboard-target='#url-to-share' id='url-to-share'>							
+							{window.location.href}							
+						</div>	
+					</div>
+				)
+			}else if(gameStatus!='AWAIT'&&gameStatus!='START'){
+				var text = gameStatus=='DRAW'? gameStatus : 'YOU '+gameStatus;
+				return (
+					<div className='dialogue'>
+						<p>{text}</p>
+						<p>Would you like to play another game?</p>
+						<button className='btn btn-custom-danger' onClick={this.handleClick.bind(this)}>YES</button>
+					</div>
+				)
+			}		
 			return (
-				<div>
-					Please copy this link and share with your opponent<br/>
-					{window.location.href}
-				</div>
-			)
-		}else if(gameStatus!='AWAIT'&&gameStatus!='START'){
-			var text = gameStatus=='DRAW'? gameStatus : 'YOU '+gameStatus;
-			return (
-				<div>
-					<p>{text}</p>
-					<p>Would you like to play another game?</p>
-					<button className='btn btn-danger' onClick={this.handleClick.bind(this)}>YES</button>
-				</div>
-			)
-		}		
-
-		return (
-			<div className='container-fluid index-page'>	
-				<h1 className='page-title'>
-					<span>Tic</span><span>Tac</span><span>Toe</span>
-				</h1>			
 				<div className='row'>					
 					<div className='col-sm-4'>
 						<Board/>
@@ -67,6 +67,15 @@ class IndexPage extends Component{
 						</div>	
 					</div>
 				</div>
+			)
+		}
+
+		return (
+			<div className='container-fluid index-page'>	
+				<h1 className='page-title'>
+					<span>Tic</span><span>Tac</span><span>Toe</span>
+				</h1>
+				{renderContent()}							
 			</div>	
 		);	
 	}

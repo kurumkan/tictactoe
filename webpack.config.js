@@ -7,6 +7,8 @@
 module.exports = {
   entry: [
     'script!rtc.min.js',
+    'script!clipboard/dist/clipboard.min.js',
+    'script!soundmanager2/script/soundmanager2-nodebug-jsmin.js',
     './frontend/src/index.jsx'
   ],
 

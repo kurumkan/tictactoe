@@ -1,6 +1,8 @@
 @import "components/board";
 @import "components/videobox";
 @import "components/textbox";
+@import "components/notfound404";
+@import "components/indexpage";
 
 body{
 	background-color: #14BDAC;
@@ -20,4 +22,12 @@ body{
 	span:nth-child(3){
 		color: #cf4242;
 	}	
+}
+.btn-custom-danger{
+	background: #0da192;
+	color: white;
+}
+.btn-custom-danger:hover{
+	background: #52C0B4;
+	color: white;
 }

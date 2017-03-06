@@ -13,7 +13,6 @@
   "author": "artur arsalanov",
   "license": "ISC",
   "devDependencies": {
-    "axios-mock-adapter": "^1.7.1",
     "babel-core": "^6.2.1",
     "babel-loader": "^6.2.0",
     "babel-preset-es2015": "^6.1.18",
@@ -40,6 +39,7 @@
   },
   "dependencies": {
     "babel-preset-stage-1": "^6.1.18",
+    "clipboard": "^1.6.1",
     "express": "^4.14.1",
     "lodash": "^3.10.1",
     "react": "^0.14.3",
@@ -53,6 +53,7 @@
     "rtc-switchboard": "^3.2.0",
     "socket.io": "^1.7.2",
     "socket.io-client": "^1.7.3",
+    "soundmanager2": "^2.97.20150601-a",
     "uuid": "^3.0.1"
   }
 }

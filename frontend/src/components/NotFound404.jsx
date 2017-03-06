@@ -13,11 +13,12 @@ class NotFound404 extends Component{
 
 	render() {
 		return (
-			<div className="notfound404 jumbotron text-center">
-				<h1>Game Not Found</h1>
-				<p className="text-danger">Error 404</p>
+			<div className="notfound404 text-center">
+				<h1 className='page-title'>
+					<span>Game</span><span>Not</span><span>Found</span>
+				</h1>				
 				<button className="btn btn-custom-danger" onClick={this.handleClick.bind(this)}>
-					<i className="glyphicon glyphicon-home"></i>Take Me Home
+					Start New Game
 				</button>
 			</div>
 		);	
