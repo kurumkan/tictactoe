@@ -6,9 +6,8 @@ import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import ReduxThunk from 'redux-thunk';
 import io from 'socket.io-client';
 
-// App css
+//app styles
 require('style!css!sass!applicationStyles');
-
 import RootReducer from 'reducers/RootReducer';
 
 import Main from 'components/Main';
@@ -22,22 +21,24 @@ var socket = io(window.location.host);
 var createStoreWithMiddleware = applyMiddleware(ReduxThunk, RemoteActionMiddleware(socket))(createStore);
 var store = createStoreWithMiddleware(RootReducer);
 
+//got new room id 
 socket.on('room',(room)=>{	
-	console.log('new room', room)
 	store.dispatch(setRoom(room))		
 });
 
+//got new message
 socket.on('message', (data)=>{		
 	store.dispatch(receiveMessage(data))	
 });
 
+//the room id does not exist
 socket.on('refuse', ()=>{		
-	browserHistory.push('404')
-	//store.dispatch(setRoom(''));		
+	browserHistory.push('404')	
 });
 
+//change game status
 socket.on('game status', (data)=>{		
-	//data can be `START`, `DRAW`, `WIN`, `LOOSE`
+	//possible data values `START`, `DRAW`, `WIN`, `LOOSE`
 	store.dispatch(setGameStatus(data));		
 });
 
@@ -45,6 +46,7 @@ socket.on('your turn', ()=>{
 	store.dispatch(changeGameTurn());	
 });
 
+//CROSS or NOUGHT
 socket.on('set symbol', (data)=>{		
 	store.dispatch(setSybmol(data));	
 });

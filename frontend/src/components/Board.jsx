@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {makeMove} from 'actions/Actions';
 
+//gameboard component
 class Board extends Component{
 
 	handleClick(e){				

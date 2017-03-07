@@ -10,6 +10,7 @@ import TextBox from 'components/TextBox';
 
 class IndexPage extends Component{
 	componentWillMount() {	
+		//if there is room query var -> set new room id
 		var {room} = this.props.location.query;				
 		if(room){						
 			setTimeout(()=>{
@@ -17,7 +18,8 @@ class IndexPage extends Component{
 			}, 600)							
 		}
 	}	
-	componentWillReceiveProps(nextProps) {		
+	componentWillReceiveProps(nextProps) {	
+		//received new room id - redirect 	
 		if(this.props.room!=nextProps.room)		
 			browserHistory.push(`game?room=${nextProps.room}`)
 	}		

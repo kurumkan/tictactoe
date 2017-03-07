@@ -10,6 +10,7 @@ class TextBox extends Component{
 	handleChange(e){		
 		var {value} = e.target;			
 
+		//send message on press [Return]
 		if(value.charCodeAt(value.length-1)==10){
 			var value = this.state.value.trim();			
 			if(value){
@@ -21,6 +22,7 @@ class TextBox extends Component{
 		}		
 	}	
 	componentDidUpdate(prevProps, prevState) {
+		//scroll .message-box down
 		var {messageBox} = this;		 
 		messageBox.scrollTop = messageBox.scrollHeight; 					
 	}

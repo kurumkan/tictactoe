@@ -1,9 +1,11 @@
+//these sounds will be played on certain events later
 var messageSound,
 	moveSound,
 	loseSound,
 	winSound,
 	drawSound;
 
+//config sound manager
 soundManager.setup({
 	onready: function() {    
 		debugMode: false,
@@ -46,6 +48,7 @@ export function receiveMessage(data){
 	}
 }
 
+//set new room
 export function setRoom(room){		
 	return {				
 		type: 'SET_ROOM',	
@@ -113,6 +116,7 @@ export function updateBoard(board){
 	}	
 }
 
+//set game board to defaults
 export function resetGame(){	
 	return function(dispatch){				
 		dispatch({

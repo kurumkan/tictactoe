@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+//root component
 export default class Main extends Component{
 	render() {		
 		return (
